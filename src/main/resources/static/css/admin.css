@@ -1,0 +1,21 @@
+ 
+            .balance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Cuando la pantalla es menor a 800px, apila los textos */
+@media (max-width: 550px) {
+  .balance-row {
+    flex-direction: column;
+    
+    text-align: center;
+  }
+
+  .balance-row span:last-child {
+    margin-top: 4px;
+    font-weight: 500;
+  }
+}
