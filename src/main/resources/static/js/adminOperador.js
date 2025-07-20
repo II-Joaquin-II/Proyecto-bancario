@@ -112,41 +112,49 @@ function liberarOperacion(button) {
         return;
     }
 
-    // Obtener el saldo actual
-    const saldoDisponibleElem = document.getElementById('saldoDisponible');
-    let saldoActualTexto = saldoDisponibleElem.textContent.replace(/[^\d.-]/g, '');
-    let saldoActual = parseFloat(saldoActualTexto);
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: `Se liberarán S/ ${montoLiberado.toFixed(2)} al saldo disponible del cliente.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, liberar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const saldoDisponibleElem = document.getElementById('saldoDisponible');
+            const saldoContableElem = document.getElementById('saldoContable');
 
-    // Sumar monto al saldo disponible
-    const nuevoSaldo = saldoActual + montoLiberado;
+            let saldoActualDisponible = parseFloat(saldoDisponibleElem.textContent.replace(/[^\d.-]/g, ''));
+            let saldoActualContable = parseFloat(saldoContableElem.textContent.replace(/[^\d.-]/g, ''));
 
-    // Actualizar visualmente el saldo disponible
-    saldoDisponibleElem.textContent = `S/ ${nuevoSaldo.toFixed(2)}`;
+            const nuevoDisponible = saldoActualDisponible + montoLiberado;
+            const nuevoContable = saldoActualContable - montoLiberado;
 
-    // Restar monto al saldo contable
-    const saldoContableElem = document.getElementById('saldoContable');
-    let saldoContableTexto = saldoContableElem.textContent.replace(/[^\d.-]/g, '');
-    let saldoContable = parseFloat(saldoContableTexto);
-    const nuevoSaldoContable = saldoContable - montoLiberado;
-    saldoContableElem.textContent = `S/ ${nuevoSaldoContable.toFixed(2)}`;
-
-    // Actualizar en la base de datos
-    fetch('/api/clientes/actualizar-saldo', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            idUsuario: clienteIdActual,
-            nuevoSaldoDisponible: nuevoSaldo
-        })
-    })
+            // Enviar datos al backend
+            fetch('/api/clientes/actualizar-saldo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idUsuario: clienteIdActual,
+                    nuevoSaldoDisponible: nuevoDisponible,
+                    nuevoSaldoContable: nuevoContable
+                })
+            })
             .then(res => {
-                if (!res.ok)
-                    throw new Error();
+                if (!res.ok) throw new Error();
                 return res.text();
             })
             .then(() => {
+                // Actualizar visualmente los saldos
+                saldoDisponibleElem.textContent = `S/ ${nuevoDisponible.toFixed(2)}`;
+                saldoContableElem.textContent = `S/ ${nuevoContable.toFixed(2)}`;
+
+                // Remplazar ambos botones por texto
+                const fila = button.closest('tr');
+                fila.querySelector('td:last-child').innerHTML = `<span class="text-success fw-bold">Dinero liberado</span>`;
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Liberado',
@@ -154,11 +162,10 @@ function liberarOperacion(button) {
                     timer: 2000,
                     showConfirmButton: false
                 });
-
-                button.disabled = true;
-                button.textContent = 'Liberado';
             })
             .catch(() => {
                 Swal.fire('Error', 'No se pudo actualizar el saldo.', 'error');
             });
+        }
+    });
 }

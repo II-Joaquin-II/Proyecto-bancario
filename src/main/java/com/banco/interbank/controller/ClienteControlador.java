@@ -28,18 +28,19 @@ public class ClienteControlador {
     public ResponseEntity<?> actualizarSaldo(@RequestBody Map<String, Object> payload) {
         try {
             Long idUsuario = Long.valueOf(payload.get("idUsuario").toString());
-            BigDecimal nuevoSaldo = new BigDecimal(payload.get("nuevoSaldoDisponible").toString());
+            BigDecimal nuevoSaldoDisponible = new BigDecimal(payload.get("nuevoSaldoDisponible").toString());
+            BigDecimal nuevoSaldoContable = new BigDecimal(payload.get("nuevoSaldoContable").toString());
 
             Usuario cliente = clienteServicio.findById(idUsuario);
             if (cliente == null) {
                 return ResponseEntity.status(404).body("Cliente no encontrado");
             }
 
-            cliente.setSaldo_disponible(nuevoSaldo);
+            cliente.setSaldo_disponible(nuevoSaldoDisponible);
+            cliente.setSaldo_contable(nuevoSaldoContable);
             clienteServicio.save(cliente);
 
-            return ResponseEntity.ok().build();
-
+            return ResponseEntity.ok("Saldos actualizados");
         } catch (Exception e) {
             return ResponseEntity.status(400).body("Error en la solicitud");
         }
