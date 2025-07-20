@@ -34,18 +34,14 @@ INSERT INTO usuario (nombre, apellidos, dni, email, saldo_disponible, saldo_cont
 ('Carlos', 'Ramírez', '12345678', 'carlos@admin.com', 0.00, 0.00, '1234'),
 -- Ana tiene el rol Analista
 ('Ana', 'Pérez', '12345679', 'ana@admin.com', 0.00, 0.00, '1234'),
-('Luis', 'Torres', '12345680', 'luis@gmail.com', 1500.00, 1600.00, '1234'),
-('María', 'Lopez', '12345681', 'maria@gmail.com', 500.00, 550.00, '1234'),
-('Jorge', 'Fernández', '12345682', 'jorge@gmail.com', 700.00, 800.00, '1234'),
-('Lucía', 'Martínez', '12345683', 'lucia@gmail.com', 950.00, 1000.00, '1234'),
-('Pedro', 'Gonzales', '12345684', 'pedro@gmail.com', 1230.00, 1300.00, '1234'),
-('Rosa', 'Vega', '12345685', 'rosa@gmail.com', 880.00, 900.00, '1234'),
-('Daniel', 'Quispe', '12345686', 'daniel@gmail.com', 1100.00, 1150.00, '1234'),
-('Elena', 'Castro', '12345687', 'elena@gmail.com', 990.00, 1000.00, '1234');
+('Luis', 'Torres', '12345680', 'luis@gmail.com', 0.00, 428.00, '1234'),
+('María', 'Lopez', '12345681', 'maria@gmail.com', 100.00, 314.00, '1234');
 
+DROP TABLE usuario;
+DROP TABLE usuario_roles;
 
 select*from usuario;
-
+select*from usuario_roles;
 
 CREATE TABLE `usuario_roles` (
     `id_usuario` INT NOT NULL,
@@ -61,11 +57,5 @@ INSERT INTO usuario_roles (id_usuario, id_roles) VALUES (2, 3);
 
 INSERT INTO usuario_roles (id_usuario, id_roles) VALUES 
 (3, 1),
-(4, 1),
-(5, 1),
-(6, 1),
-(7, 1),
-(8, 1),
-(9, 1),
-(10, 1);
+(4, 1);
 select*from usuario_roles;
