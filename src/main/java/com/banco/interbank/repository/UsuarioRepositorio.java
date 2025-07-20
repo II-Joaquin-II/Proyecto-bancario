@@ -10,5 +10,7 @@ import com.banco.interbank.model.Usuario;
 public interface UsuarioRepositorio extends JpaRepository<Usuario, Long>{
 
     Optional<Usuario>findByEmailAndPassword(String email, String password);
+    Optional<Usuario> findByDni(String dni);
+    Optional<Usuario> findById(Long id);
 
 }

@@ -17,7 +17,7 @@ public class AdminVistaControlador {
         return "adminOperador"; // la vista Thymeleaf
     }
 
-     @GetMapping("/adminAnalista")
+    @GetMapping("/adminAnalista")
     public String adminAnalista(HttpSession session) {
         LoginResponse usuario = (LoginResponse) session.getAttribute("usuario");
         if (usuario == null || !usuario.getRoles().contains("ROLE_ANALISTA")) {
